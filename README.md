@@ -11,6 +11,7 @@ Production-grade, **pure SQL** analytics pipeline for LLM/AI usage telemetry, bu
 - [Architecture Guide](docs/ARCHITECTURE.md) - Layer transformation flow and dimensional schema design.
 - [Metrics Dictionary](docs/METRICS_DICTIONARY.md) - Formal business definitions for DAU, token spend, error rates, and P95 latency.
 - [Data Governance](docs/DATA_GOVERNANCE.md) - Quality SLAs, retention schedules, and PII protection policies.
+- [Frequently Asked Questions (FAQ)](docs/FAQ.md) - Design rationale and architecture FAQ.
 
 ---
 
@@ -23,7 +24,7 @@ cd docker
 docker compose up -d
 ```
 
-### 2. Execute SQL Pipeline in Sequence
+### 2. Execute SQL Pipeline
 
 ```bash
 bash scripts/run_pipeline.sh
