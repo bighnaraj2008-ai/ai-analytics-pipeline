@@ -10,6 +10,7 @@ Production-grade, **pure SQL** analytics pipeline for LLM/AI usage telemetry, bu
 
 - [Architecture Guide](docs/ARCHITECTURE.md) - Layer transformation flow and dimensional schema design.
 - [Metrics Dictionary](docs/METRICS_DICTIONARY.md) - Formal business definitions for DAU, token spend, error rates, and P95 latency.
+- [Data Governance](docs/DATA_GOVERNANCE.md) - Quality SLAs, retention schedules, and PII protection policies.
 
 ---
 
@@ -25,11 +26,6 @@ docker compose up -d
 ### 2. Execute SQL Pipeline in Sequence
 
 ```bash
-export PGPASSWORD=analytics
-psql -h localhost -U analytics -d ai_analytics -f sql/seed_raw_events.sql
-psql -h localhost -U analytics -d ai_analytics -f sql/staging/stg_users.sql
-psql -h localhost -U analytics -d ai_analytics -f sql/staging/stg_ai_events.sql
-psql -h localhost -U analytics -d ai_analytics -f sql/intermediate/int_session_metrics.sql
-psql -h localhost -U analytics -d ai_analytics -f sql/marts/dim_users.sql
-psql -h localhost -U analytics -d ai_analytics -f sql/marts/fct_ai_usage_daily.sql
+bash scripts/run_pipeline.sh
+bash scripts/run_tests.sh
 ```
