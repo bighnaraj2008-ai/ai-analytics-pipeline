@@ -6,6 +6,21 @@ Production-grade, **pure SQL** analytics pipeline for LLM/AI usage telemetry, bu
 
 ---
 
+## Metrics Hierarchy
+
+```mermaid
+graph TD
+    A[North Star: Weekly Active LLM Users] --> B[Daily Active Users DAU]
+    A --> C[Weekly Retention Rate %]
+    B --> D[Total Model Requests]
+    B --> E[Total Tokens Consumed]
+    E --> F[Cost per Active User USD]
+    D --> H[Model Error Rate %]
+    D --> I[P95 Latency ms]
+```
+
+---
+
 ## Documentation
 
 - [Architecture Guide](docs/ARCHITECTURE.md) - Layer transformation flow and dimensional schema design.
@@ -13,6 +28,7 @@ Production-grade, **pure SQL** analytics pipeline for LLM/AI usage telemetry, bu
 - [Data Governance](docs/DATA_GOVERNANCE.md) - Quality SLAs, retention schedules, and PII protection policies.
 - [Frequently Asked Questions (FAQ)](docs/FAQ.md) - Design rationale and architecture FAQ.
 - [Troubleshooting Guide](docs/TROUBLESHOOTING.md) - Resolving connection and assertion issues.
+- [Metrics Tree Diagram](docs/METRICS_TREE.mmd) - Mermaid KPI tree.
 
 ---
 
