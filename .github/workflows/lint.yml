@@ -1,0 +1,27 @@
+name: SQL Style Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  sqlfluff-lint:
+    name: Lint SQL Models
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install SQLFluff
+        run: pip install sqlfluff==3.0.7
+
+      - name: Lint SQL files
+        continue-on-error: true
+        run: sqlfluff lint sql/
