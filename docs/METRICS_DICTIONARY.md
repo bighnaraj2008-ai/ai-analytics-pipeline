@@ -9,6 +9,7 @@ including business meanings, calculations, source layers, and grain definitions.
 
 1. [Daily Active Users (DAU)](#1-daily-active-users-dau)
 2. [User Retention & Cohort Metrics](#2-user-retention--cohort-metrics)
+3. [Token Cost per User](#3-token-cost-per-user)
 
 ---
 
@@ -34,3 +35,16 @@ including business meanings, calculations, source layers, and grain definitions.
 | **Definition** | Percentage of users from an onboarding cohort who remain active in subsequent weeks. |
 | **Calculation** | `active_users * 100.0 / NULLIF(cohort_size, 0)` |
 | **Grain** | One row per cohort per elapsed weekly period. |
+
+---
+
+## 3. Token Cost per User
+
+| Property | Value |
+|----------|-------|
+| **Mart** | `fct_ai_usage_daily` |
+| **Column** | `token_cost_per_user_usd` |
+| **Definition** | Estimated LLM token expenditure attributed per active user per day. |
+| **Calculation** | `(total_tokens * 0.000002) / NULLIF(dau, 0)` where `total_tokens = SUM(tokens_used)`. |
+| **Grain** | One row per day. |
+| **Interpretation** | Financial unit economics metric tracking cost sustainability across customer tiers. |
