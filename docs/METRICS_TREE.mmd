@@ -1,0 +1,11 @@
+graph TD
+    A[North Star: Weekly Active LLM Users] --> B[Daily Active Users DAU]
+    A --> C[Weekly Retention Rate %]
+    B --> D[Total Model Requests]
+    B --> E[Total Tokens Consumed]
+    E --> F[Cost per Active User USD]
+    E --> G[Cost per Model Family]
+    D --> H[Model Error Rate %]
+    D --> I[P95 Latency ms]
+    H --> J[HTTP 4xx Prompt Validation Errors]
+    H --> K[HTTP 5xx Provider Upstream Errors]
