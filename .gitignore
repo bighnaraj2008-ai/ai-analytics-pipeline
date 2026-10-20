@@ -1,0 +1,25 @@
+# Build / target directories
+target/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment / secrets (no real .env files committed)
+.env
+.env.*
+
+# IDEs / editors
+.idea/
+.vscode/
+.antigravity/
+.cursor/
+.claude/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
