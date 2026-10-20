@@ -26,3 +26,45 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Seed raw events
+        run: PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/seed_raw_events.sql
+
+      - name: Create staging views
+        run: |
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/staging/stg_users.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/staging/stg_ai_events.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/staging/stg_model_requests.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/staging/stg_feedback.sql
+
+      - name: Create intermediate views
+        run: |
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/intermediate/int_session_metrics.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/intermediate/int_token_aggregates.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/intermediate/int_user_activity.sql
+          if [ -f sql/intermediate/int_user_retention.sql ]; then
+            PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/intermediate/int_user_retention.sql
+          fi
+
+      - name: Create mart views and tables
+        run: |
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/marts/dim_users.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/marts/dim_models.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/marts/fct_ai_usage_daily.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/marts/fct_user_sessions.sql
+          PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/marts/agg_monthly_costs.sql
+          if [ -f sql/marts/agg_model_performance.sql ]; then
+            PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/marts/agg_model_performance.sql
+          fi
+          if [ -f sql/marts/fct_user_retention_cohorts.sql ]; then
+            PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f sql/marts/fct_user_retention_cohorts.sql
+          fi
+
+      - name: Run SQL schema and assertion tests
+        run: |
+          for test_file in sql/tests/assert_*.sql; do
+            if [ -f "$test_file" ]; then
+              echo "Executing test: $test_file"
+              PGPASSWORD=analytics psql -h localhost -U analytics -d ai_analytics -v ON_ERROR_STOP=1 -f "$test_file"
+            fi
+          done
