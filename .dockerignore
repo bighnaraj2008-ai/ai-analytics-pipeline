@@ -1,0 +1,13 @@
+# Ignore source control and sensitive files in Docker build context
+.git
+.gitignore
+.env
+.env.*
+.vscode
+.idea
+.antigravity
+*.md
+target/
+*.db
+*.sqlite*
+*.log
