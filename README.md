@@ -12,21 +12,14 @@ Production-grade, **pure SQL** analytics pipeline for LLM/AI usage telemetry, bu
 - [Metrics Dictionary](docs/METRICS_DICTIONARY.md) - Formal business definitions for DAU, token spend, error rates, and P95 latency.
 - [Data Governance](docs/DATA_GOVERNANCE.md) - Quality SLAs, retention schedules, and PII protection policies.
 - [Frequently Asked Questions (FAQ)](docs/FAQ.md) - Design rationale and architecture FAQ.
+- [Troubleshooting Guide](docs/TROUBLESHOOTING.md) - Resolving connection and assertion issues.
 
 ---
 
 ## Local Setup (Docker)
 
-### 1. Start PostgreSQL Container
-
 ```bash
-cd docker
-docker compose up -d
-```
-
-### 2. Execute SQL Pipeline
-
-```bash
-bash scripts/run_pipeline.sh
-bash scripts/run_tests.sh
+cd docker && docker compose up -d
+bash ../scripts/run_pipeline.sh
+bash ../scripts/run_tests.sh
 ```
