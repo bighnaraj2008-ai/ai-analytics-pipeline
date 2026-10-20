@@ -19,7 +19,29 @@ cd docker
 docker compose up -d
 ```
 
-This boots PostgreSQL 15 on port `5432` with credentials:
-- Database: `ai_analytics`
-- User: `analytics`
-- Password: `analytics`
+### 2. Execute SQL Pipeline in Sequence
+
+```bash
+export PGPASSWORD=analytics
+
+# 1. Seed raw data
+psql -h localhost -U analytics -d ai_analytics -f sql/seed_raw_events.sql
+
+# 2. Build staging models
+psql -h localhost -U analytics -d ai_analytics -f sql/staging/stg_users.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/staging/stg_ai_events.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/staging/stg_model_requests.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/staging/stg_feedback.sql
+
+# 3. Build intermediate models
+psql -h localhost -U analytics -d ai_analytics -f sql/intermediate/int_session_metrics.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/intermediate/int_token_aggregates.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/intermediate/int_user_activity.sql
+
+# 4. Build marts models
+psql -h localhost -U analytics -d ai_analytics -f sql/marts/dim_users.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/marts/dim_models.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/marts/fct_ai_usage_daily.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/marts/fct_user_sessions.sql
+psql -h localhost -U analytics -d ai_analytics -f sql/marts/agg_monthly_costs.sql
+```
